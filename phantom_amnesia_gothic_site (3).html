@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Descending Into Dark: Gothic Space & Sound in Phantom of the Opera and Amnesia: The Dark Descent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IM+Fell+English:ital@0;1&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0805;
+    --deep: #110e0a;
+    --charcoal: #1c1712;
+    --ash: #2e2820;
+    --gold: #c9a84c;
+    --gold-dim: #8a6f2e;
+    --bone: #e8dfc8;
+    --cream: #f5f0e8;
+    --red: #8b1a1a;
+    --red-dim: #5c1111;
+    --fog: rgba(201,168,76,0.08);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--bone);
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.8;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events:none;
+    z-index:1000;
+    opacity:.4;
+  }
+
+  /* ── NAVIGATION ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 900;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 48px;
+    background: linear-gradient(to bottom, rgba(10,8,5,0.97), transparent);
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+
+  nav .logo {
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 100;
+    letter-spacing: 0.3em;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 36px;
+  }
+
+  nav ul a {
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bone);
+    text-decoration: none;
+    transition: color 0.3s;
+    opacity: 0.7;
+  }
+
+  nav ul a:hover { color: var(--gold); opacity:1; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 80px 100px;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 30% 60%, #1a0f05 0%, #0a0805 60%);
+  }
+
+  .hero-bg-art {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 70% 40%, rgba(139,26,26,0.12) 0%, transparent 55%),
+      radial-gradient(circle at 20% 70%, rgba(201,168,76,0.06) 0%, transparent 45%);
+  }
+
+  .hero-vertical-rule {
+    position: absolute;
+    left: 72px;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--gold-dim) 30%, var(--gold-dim) 70%, transparent);
+    opacity: 0.3;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 100;
+    letter-spacing: 0.5em;
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.3s forwards;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    max-width: 900px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.6s forwards;
+  }
+
+  .hero h1 em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .hero-subtitle {
+    margin-top: 32px;
+    font-size: 1.05rem;
+    font-style: italic;
+    color: rgba(232,223,200,0.6);
+    max-width: 540px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.9s forwards;
+  }
+
+  .hero-sources {
+    margin-top: 48px;
+    display: flex;
+    gap: 48px;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.2s forwards;
+  }
+
+  .hero-source-tag {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold-dim);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(201,168,76,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.8s forwards;
+  }
+
+  .scroll-hint::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+
+  /* ── SECTION WRAPPER ── */
+  section {
+    padding: 120px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .section-full {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  /* ── SECTION LABELS ── */
+  .section-label {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-label::after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 60px;
+    background: var(--gold-dim);
+  }
+
+  /* ── HEADINGS ── */
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 40px;
+    color: var(--cream);
+  }
+
+  h2 em { color: var(--gold); font-style: italic; }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  p { margin-bottom: 20px; color: rgba(232,223,200,0.88); }
+
+  /* ── DIVIDERS ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(201,168,76,0.2), transparent);
+    margin: 0;
+  }
+
+  /* ── INTRO / THESIS SECTION ── */
+  .thesis-block {
+    background: var(--deep);
+    padding: 80px;
+    border-left: 3px solid var(--gold);
+    margin: 60px 0;
+    position: relative;
+  }
+
+  .thesis-block::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 200px;
+    color: rgba(201,168,76,0.05);
+    position: absolute;
+    top: -20px;
+    left: 30px;
+    line-height: 1;
+  }
+
+  .thesis-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--bone);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── TWO-COLUMN COMPARISON ── */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin: 60px 0;
+  }
+
+  .compare-card {
+    background: var(--charcoal);
+    padding: 60px 48px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+  }
+
+  .compare-card:hover { background: var(--ash); }
+
+  .compare-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .compare-card.phantom::before { background: var(--gold); }
+  .compare-card.amnesia::before { background: var(--red); }
+
+  .compare-tag {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: block;
+  }
+
+  .compare-card.phantom .compare-tag { color: var(--gold); }
+  .compare-card.amnesia .compare-tag { color: #c44; }
+
+  .compare-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+  }
+
+  /* ── QUOTE BLOCKS ── */
+  blockquote {
+    border-left: 2px solid var(--gold-dim);
+    padding: 20px 32px;
+    margin: 36px 0;
+    background: rgba(201,168,76,0.04);
+    font-style: italic;
+    color: var(--bone);
+  }
+
+  blockquote cite {
+    display: block;
+    margin-top: 12px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    font-style: normal;
+  }
+
+  /* ── MEDIA EMBED CONTAINERS ── */
+  .media-container {
+    background: var(--charcoal);
+    border: 1px solid rgba(201,168,76,0.1);
+    padding: 32px;
+    margin: 48px 0;
+  }
+
+  .media-label {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .media-label::before {
+    content: '▶';
+    font-size: 8px;
+    color: var(--gold);
+  }
+
+  .embed-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .embed-wrapper iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+  }
+
+  .media-caption {
+    margin-top: 16px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(232,223,200,0.5);
+    font-style: italic;
+  }
+
+  /* ── AUDIO PLAYER STYLED ── */
+  .audio-player-block {
+    background: var(--charcoal);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 32px 40px;
+    margin: 36px 0;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .audio-icon {
+    font-size: 2rem;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .audio-info { flex: 1; }
+
+  .audio-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--bone);
+    margin-bottom: 4px;
+  }
+
+  .audio-desc {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+  }
+
+  audio {
+    width: 100%;
+    margin-top: 12px;
+    accent-color: var(--gold);
+  }
+
+  /* ── INTERACTIVE ACCORDION ── */
+  .accordion {
+    margin: 48px 0;
+    border: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .accordion-item {
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .accordion-item:last-child { border-bottom: none; }
+
+  .accordion-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 28px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    text-align: left;
+    color: var(--bone);
+    transition: background 0.3s;
+  }
+
+  .accordion-btn:hover { background: rgba(201,168,76,0.05); }
+
+  .accordion-btn-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+  }
+
+  .accordion-btn-icon {
+    font-size: 1.2rem;
+    color: var(--gold);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+    margin-left: 24px;
+  }
+
+  .accordion-btn.open .accordion-btn-icon { transform: rotate(45deg); }
+
+  .accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.3s;
+    padding: 0 40px;
+    background: var(--deep);
+  }
+
+  .accordion-body.open {
+    max-height: 600px;
+    padding: 32px 40px;
+  }
+
+  /* ── SIDE BY SIDE QUOTES ── */
+  .quote-duel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin: 60px 0;
+  }
+
+  .quote-side {
+    padding: 48px;
+    background: var(--charcoal);
+  }
+
+  .quote-side.left { border-left: 3px solid var(--gold); }
+  .quote-side.right { border-left: 3px solid var(--red); }
+
+  .quote-source {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 20px;
+  }
+
+  .quote-side.right .quote-source { color: #9b4444; }
+
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--bone);
+    margin-bottom: 16px;
+  }
+
+  .quote-cite {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(232,223,200,0.4);
+  }
+
+  /* ── FULL-BLEED DARK BANDS ── */
+  .dark-band {
+    background: var(--deep);
+    padding: 100px 80px;
+    margin: 0;
+    border-top: 1px solid rgba(201,168,76,0.08);
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+  }
+
+  .dark-band-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ── SANITY METER INTERACTIVE ── */
+  .sanity-demo {
+    background: var(--charcoal);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 48px;
+    margin: 48px 0;
+    text-align: center;
+  }
+
+  .sanity-label {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 20px;
+  }
+
+  .sanity-bar-container {
+    background: rgba(255,255,255,0.05);
+    height: 6px;
+    border-radius: 0;
+    overflow: hidden;
+    margin: 16px 0;
+    width: 100%;
+  }
+
+  .sanity-bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--red), var(--gold));
+    transition: width 0.8s ease;
+  }
+
+  .sanity-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: var(--bone);
+    margin: 8px 0;
+  }
+
+  .sanity-description {
+    font-style: italic;
+    color: rgba(232,223,200,0.6);
+    font-size: 0.9rem;
+    min-height: 48px;
+    margin: 16px 0;
+  }
+
+  .sanity-slider {
+    width: 100%;
+    accent-color: var(--gold);
+    margin: 20px 0;
+    cursor: pointer;
+  }
+
+  /* ── WORKS CITED ── */
+  .works-cited {
+    background: var(--deep);
+    padding: 80px;
+    border-top: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .works-cited-inner { max-width: 900px; margin: 0 auto; }
+
+  .cite-entry {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+    color: rgba(232,223,200,0.7);
+    font-size: 0.92rem;
+  }
+
+  /* ── CREATOR'S NOTE ── */
+  .creators-note {
+    background: var(--charcoal);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 60px;
+    margin: 60px 0;
+    position: relative;
+  }
+
+  .creators-note::before {
+    content: '✦';
+    font-size: 1rem;
+    color: var(--gold);
+    position: absolute;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    padding: 60px 80px;
+    border-top: 1px solid rgba(201,168,76,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer .footer-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--gold-dim);
+  }
+
+  footer .footer-meta {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: rgba(232,223,200,0.3);
+    text-transform: uppercase;
+  }
+
+  /* ── PAGE TABS (simulate multi-page) ── */
+  .page-tabs {
+    display: flex;
+    background: var(--deep);
+    border-bottom: 1px solid rgba(201,168,76,0.12);
+    position: sticky;
+    top: 55px;
+    z-index: 800;
+    overflow-x: auto;
+  }
+
+  .page-tab {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 16px 32px;
+    background: none;
+    border: none;
+    color: rgba(232,223,200,0.4);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.3s;
+  }
+
+  .page-tab:hover { color: var(--bone); }
+  .page-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .page-content { display: none; }
+  .page-content.active { display: block; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(24px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  @keyframes scrollLine {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    nav ul { gap: 20px; }
+    .hero { padding: 0 32px 80px; }
+    section { padding: 80px 32px; }
+    .compare-grid, .quote-duel { grid-template-columns: 1fr; }
+    .dark-band { padding: 80px 32px; }
+    .works-cited { padding: 60px 32px; }
+    footer { padding: 40px 32px; flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <span class="logo">Gothic Studies · ENG 318</span>
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#sound">Sound</a></li>
+    <li><a href="#sanity">Sanity</a></li>
+    <li><a href="#creators-note">Creator's Note</a></li>
+    <li><a href="#works-cited">Works Cited</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════════════ PAGE 1: HOME / INTRO ═══ -->
+<div id="home">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg-art"></div>
+    <div class="hero-vertical-rule"></div>
+
+    <p class="hero-eyebrow">ENG 318 · Gothic Literature & Games · Final Project</p>
+
+    <h1>
+      Descending<br>
+      Into <em>Dark</em>
+    </h1>
+
+    <p class="hero-subtitle">
+      How Gothic architecture and auditory manipulation destroy the human mind in
+      Leroux's <em>The Phantom of the Opera</em> and Frictional Games's
+      <em>Amnesia: The Dark Descent</em>
+    </p>
+
+    <div class="hero-sources">
+      <span class="hero-source-tag">Primary: The Phantom of the Opera · Leroux, 1910</span>
+      <span class="hero-source-tag">Primary: Amnesia: The Dark Descent · Frictional Games, 2010</span>
+    </div>
+
+    <div class="scroll-hint">Descend</div>
+  </div>
+
+  <!-- INTRO -->
+  <section>
+    <div class="section-label">Introduction</div>
+    <h2>The Architecture of <em>Fear</em></h2>
+
+    <p>
+      In Gaston Leroux's 1910 novel <em>The Phantom of the Opera</em>, the horror is not caused
+      by any sort of curse or supernatural force. It is caused by the dark descent — both physically
+      and mentally. Leroux takes the fancy, glamorous Paris Opera House and turns it into a maze
+      that breaks the characters and strips away their control. He makes the connection between the
+      physical descent into the deep cellars of the Opera House and the breakdown of the human mind.
+    </p>
+    <p>
+      One hundred years later, the Swedish game studio Frictional Games released <em>Amnesia: The Dark Descent</em>,
+      a survival horror game set in the suffocating corridors of Castle Brennenburg. Like the Opera House,
+      the castle is not merely a setting — it is a predator. It uses darkness, sound, and labyrinthine
+      architecture to strip the player of their sanity just as the building strips Daniel of his.
+    </p>
+
+    <div class="thesis-block">
+      <p class="thesis-text">
+        Both texts deploy Gothic space and Gothic sound as instruments of psychological
+        warfare. The descent into darkness — literal and figurative — is the mechanism through
+        which architecture becomes a character, sound becomes a weapon, and the rational
+        human mind collapses entirely.
+      </p>
+    </div>
+
+    <p>
+      This website explores three interconnected Gothic strategies that both works share:
+      the labyrinthine architecture as an active villain, the use of sound and silence to
+      manipulate emotion and sanity, and the inevitable psychological unraveling of anyone
+      who descends far enough into the dark.
+    </p>
+  </section>
+
+  <!-- VIDEO INTRO EMBED -->
+  <div class="dark-band">
+    <div class="dark-band-inner">
+      <div class="section-label">Orientation</div>
+      <h2>Enter the <em>Worlds</em></h2>
+      <p style="max-width:700px; margin-bottom:40px;">
+        Before the analysis, orient yourself in each world. The atmospheric trailers below
+        establish the visual and sonic language of each Gothic space — the gilded, gaslit halls
+        above and the suffocating darkness below.
+      </p>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:32px;">
+        <div>
+          <div class="media-label">The Phantom of the Opera — 2004 Film Trailer</div>
+          <div class="embed-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/N91AL8sAh9o"
+              title="Phantom of the Opera Trailer"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <p class="media-caption">
+            The 2004 film adaptation captures the visual duality of the Opera House — gilded
+            grandeur above, labyrinthine darkness below. Note how the underground sequences
+            shift the visual palette entirely.
+          </p>
+        </div>
+        <div>
+          <div class="media-label">Amnesia: The Dark Descent — Official Trailer</div>
+          <div class="embed-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/u1nY_5-UrY4"
+              title="Amnesia The Dark Descent Trailer"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <p class="media-caption">
+            Frictional Games's trailer for <em>Amnesia</em> emphasizes the same Gothic principles:
+            oppressive architecture, complete darkness, and the sound design that makes the
+            castle feel alive.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end #home -->
+
+<!-- ═══════════════════════════════════════════ PAGE 2: ARCHITECTURE ═══ -->
+<div id="architecture">
+  <section>
+    <div class="section-label">Page Two · Gothic Architecture</div>
+    <h2>The Labyrinth as <em>Villain</em></h2>
+
+    <p>
+      In order to appreciate the genuine horror of descending the Opera House, it is important to
+      realize the stark contrast between its two levels. The Belle Époque period in Paris saw
+      the Opera House as the epitome of wealth and artistic flair — a brightly lit world of luxury
+      and high society. But Leroux quickly dispels the reader's illusions by showing it is built
+      directly on top of a nightmare.
+    </p>
+
+    <blockquote>
+      "The architecture of the building is very deep and disconcerting with seventeen stories,
+      and more than three thousand doors."
+      <cite>— Leroux, <em>The Phantom of the Opera</em>, ch. 11</cite>
+    </blockquote>
+
+    <p>
+      The enormous architecture of the building is not meant to be awe-inspiring but is intended
+      to be disconcerting and frightening. It becomes a trap where a person can get lost without
+      leaving a single trace in a very public place. Leroux is sending a clear message: no matter
+      how civilized and modern a society thinks it is, it is built on a primitive and savage foundation.
+    </p>
+
+    <!-- COMPARE GRID -->
+    <div class="compare-grid">
+      <div class="compare-card phantom">
+        <span class="compare-tag">The Phantom of the Opera</span>
+        <h3>The Paris Opera House</h3>
+        <p>
+          The underground lake is a dark, watery border between two worlds. When Erik transports
+          his victims across this dark water in his small boat, the situation is reminiscent of
+          crossing into the underworld in mythology — like the River Styx. Going from the bright,
+          wealthy world of the opera house and crossing onto this lake is exactly like crossing
+          from the land of the living.
+        </p>
+        <p>
+          Rather than a dungeon with iron bars, Leroux offers a contemporary, mechanical trap:
+          hidden doors and disorienting dead ends. Erik's mirrored dungeon of torture creates fear
+          not through physical pain but through the mind — hallucinations and artificial heat that
+          feels like a desert, forcing victims to lose their grip on reality.
+        </p>
+      </div>
+      <div class="compare-card amnesia">
+        <span class="compare-tag">Amnesia: The Dark Descent</span>
+        <h3>Castle Brennenburg</h3>
+        <p>
+          Castle Brennenburg mirrors the Opera House in its fundamental Gothic strategy. Like
+          the Opera House, it is a vertical space — the player descends, level by level, deeper
+          into the castle's bowels. The architecture was not designed for human habitation; it was
+          designed to break the human mind.
+        </p>
+        <p>
+          In <em>Amnesia</em>, rooms shift behind you. Passages that should lead somewhere circle
+          back on themselves. The game's design explicitly denies the player a map they can rely on,
+          recreating in interactive form the same disorienting horror that Leroux creates for Raoul
+          and the Persian when they descend below the stage.
+        </p>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE VIDEO -->
+    <div class="media-container">
+      <div class="media-label">Amnesia Gameplay — The Descent into Brennenburg</div>
+      <div class="embed-wrapper">
+        <iframe
+          src="https://www.youtube.com/embed/6MQV3PpTPXg?start=8680&end=8720"
+          title="Amnesia Dark Descent gameplay"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <p class="media-caption">
+        This gameplay footage captures the architectural horror of Brennenburg — narrow corridors,
+        false passages, and the oppressive dark that the lantern barely holds at bay. Compare the
+        spatial disorientation here to Leroux's descriptions of the Opera House's cellars.
+      </p>
+    </div>
+
+    <!-- ACCORDION: Deeper Analysis -->
+    <h3>Further Architectural Analysis</h3>
+    <div class="accordion">
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          <span class="accordion-btn-text">The Styx Crossing: Mythology and Gothic Space</span>
+          <span class="accordion-btn-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <p>
+            Leroux's underground lake functions as more than set-dressing — it is a mythological
+            threshold. The Styx, in Greek mythology, is the river that separates the world of the
+            living from the realm of the dead. It can only be crossed by boat, with the ferryman
+            Charon as guide. Erik serves this role: he is the ferryman of his own underworld,
+            transporting his victims from the rational, lit world above into the irrational darkness
+            below. Once you cross, the rules of the world above no longer apply.
+          </p>
+          <p>
+            Castle Brennenburg employs a similar mythological structure. The player descends through
+            increasingly infernal levels — wine cellar, sewers, prison, and finally the machine room
+            and orb chamber at the absolute bottom. This vertical descent into darkness mirrors the
+            classical katabasis (descent into the underworld) found in Dante, Virgil, and Homer.
+            Both Leroux and Frictional Games are drawing on ancient mythological fear: the terror
+            of going underground, of being below the world of the living.
+          </p>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          <span class="accordion-btn-text">The Mirrored Room: Psychological Torture by Architecture</span>
+          <span class="accordion-btn-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <p>
+            The most disturbing space in Leroux's novel is not the lake or the cellars — it is
+            the mirrored torture chamber. In this room, there is no fear of physical pain. The fear
+            is entirely in the mind. The victim is locked in a room filled with mirrors that cause
+            hallucinations and artificial heat that feels like a desert. The victim is forced to
+            hallucinate and lose their grip on reality.
+          </p>
+          <p>
+            The Persian, the character who knows the most about Erik's traps, tells us that the
+            dungeon is designed to drive the victim to the point where they will finally use the
+            room's "iron tree, with its iron branch, for the hanged men" (Leroux, ch. 22).
+            The architecture is not just a trap — it is a death machine designed specifically to
+            destroy the mind before taking the life. This is the Gothic at its most sophisticated:
+            the horror is not external but internal, generated by the space itself.
+          </p>
+          <p>
+            <em>Amnesia</em> deploys the same logic in its Machine Room sequences. The player is
+            subjected to visual distortions — the game literally warps its own graphics to simulate
+            Daniel's loss of sanity. Like the mirrored room, the castle turns your own perception
+            against you.
+          </p>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          <span class="accordion-btn-text">Sociopolitical Context: Belle Époque Paris and What Lies Beneath</span>
+          <span class="accordion-btn-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <p>
+            Leroux was writing in the Belle Époque period — the "Beautiful Era" of French culture,
+            a time of optimism, technological progress, and bourgeois elegance. The Paris Opéra
+            (Palais Garnier, built 1861–1875) was a literal monument to this optimism: one of the
+            grandest buildings on earth, a symbol of civilization's triumph.
+          </p>
+          <p>
+            Leroux's decision to place his horror <em>beneath</em> this specific building is a
+            deliberate sociopolitical critique. The beautiful surface of the Belle Époque is built,
+            literally, on a dark, mechanical, primitive foundation. The Opera House horror is a
+            metaphor for the hidden violences of modern civilization — the workers, the marginalized,
+            and the monstrous that polite society chooses not to see but which sustains everything above.
+          </p>
+          <p>
+            <em>Amnesia</em>'s Alexander of Brennenburg similarly exploits his social position —
+            a powerful nobleman — to conduct experiments that are hidden from the world above.
+            The castle's architecture enables his crimes by concealing them in the depths.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div><!-- end #architecture -->
+
+<!-- ═══════════════════════════════════════════ PAGE 3: SOUND ═══ -->
+<div id="sound">
+  <div class="dark-band">
+    <div class="dark-band-inner">
+      <div class="section-label">Page Three · Gothic Sound</div>
+      <h2>The Voice in the <em>Dark</em></h2>
+
+      <p style="max-width:760px;">
+        When you are in a dark place, underground, unable to see anything, your senses will be
+        controlled by your fear of the unknown. Both Leroux and Frictional Games understood this
+        intuitively: in the dark, sound becomes the primary sense — and therefore the primary
+        weapon.
+      </p>
+
+      <!-- AUDIO SECTION -->
+      <div style="margin-top:60px;">
+        <h3>Listen: The Gothic Soundscape</h3>
+        <p>
+          These audio examples — the Phantom's voice manipulating Christine, and Amnesia's ambient
+          sound design — demonstrate how both works weaponize sound. Listen for the use of reverberation,
+          disembodied vocals, and the way silence is broken to maximum effect.
+        </p>
+
+        <div class="audio-player-block">
+          <span class="audio-icon">♪</span>
+          <div class="audio-info">
+            <p class="audio-title">The Music of the Night — Andrew Lloyd Webber</p>
+            <p class="audio-desc">Phantom of the Opera · The Phantom's auditory manipulation of Christine</p>
+            <div class="embed-wrapper" style="padding-bottom:56.25%; position:relative; height:0; overflow:hidden;">
+              <iframe
+                src="https://www.youtube.com/embed/EBDxEHzidx0?end=340"
+                title="Music of the Night Audio"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;">
+              </iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- YouTube audio as video embed -->
+        <div class="media-container">
+          <div class="media-label">The Music of the Night — Phantom using music as control</div>
+          <div class="embed-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/yh3_ps50yrg"
+              title="Music of the Night"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <p class="media-caption">
+            Erik's musical compositions — particularly <em>Don Juan Triumphant</em> in the novel —
+            serve as more than creative expression. Music is his primary tool for controlling Christine.
+            Notice how the song itself enacts what the novel describes: the voice comes from everywhere
+            and nowhere, stripping the listener's autonomy.
+          </p>
+        </div>
+
+        <div class="media-container" style="margin-top:40px;">
+          <div class="media-label">Amnesia: The Dark Descent — Sound Design Analysis</div>
+          <div class="embed-wrapper">
+            <iframe
+              src="https://www.youtube.com/embed/Q06d40zChDM"
+              title="Amnesia sound design"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <p class="media-caption">
+            <em>Amnesia</em>'s award-winning sound design is the core of its horror. Ambient groans,
+            distant footsteps, and voices that seem to come from within the walls — the castle
+            commands the walls just as Erik commands his walls. The sound directly affects the
+            player's emotional state, which in turn affects Daniel's sanity meter.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <section>
+    <h3>Sound as Control</h3>
+
+    <!-- SIDE-BY-SIDE QUOTE DUEL -->
+    <div class="quote-duel">
+      <div class="quote-side left">
+        <p class="quote-source">The Phantom of the Opera · Leroux</p>
+        <p class="quote-text">
+          "He commands the walls."
+        </p>
+        <p class="quote-cite">— Leroux, ch. 19</p>
+        <p style="margin-top:20px; font-size:0.9rem; color:rgba(232,223,200,0.7);">
+          Erik is a master ventriloquist who throws his voice to come from something solid —
+          stone walls, ceiling, the floor. When you are in the dark, unable to see, and the
+          walls themselves speak to you, your senses become weaponized against you.
+          The Phantom does not need to be in the room. He is the room.
+        </p>
+      </div>
+      <div class="quote-side right">
+        <p class="quote-source">Amnesia: The Dark Descent · Frictional Games</p>
+        <p class="quote-text">
+          "Something is wrong with this place. I can feel it."
+        </p>
+        <p class="quote-cite">— Daniel's journal, Amnesia</p>
+        <p style="margin-top:20px; font-size:0.9rem; color:rgba(232,223,200,0.7);">
+          In <em>Amnesia</em>, the castle speaks through sound. Inhuman groans echo through
+          corridors with no source. Footsteps approach from around corners where nothing is
+          there. The game's sound engine was specifically designed so that players could not
+          locate threats by sound alone — the castle controls what you hear.
+        </p>
+      </div>
+    </div>
+
+    <p>
+      Erik uses his role as the "Angel of Music" — the spiritual guardian Christine's late father
+      promised to send from heaven — to completely take away any shred of her free will. Christine
+      describes this awful feeling of losing her free will; Raoul responds with a chilling line:
+    </p>
+
+    <blockquote>
+      "Oh, you are getting more like me now, seeing him everywhere!"
+      <cite>— Raoul, in Leroux, ch. 13</cite>
+    </blockquote>
+
+    <p>
+      The Phantom's voice has colonized Christine's mind to such a degree that Raoul — a rational,
+      educated man — is himself beginning to succumb to the same paranoia. The disembodied voice
+      in the dark does not just manipulate the direct target. It spreads, infecting everyone in
+      proximity. This is exactly what Amnesia's sound design achieves: the player, sitting in
+      their chair, begins to believe they hear footsteps that aren't there.
+    </p>
+
+    <!-- ACCORDION -->
+    <div class="accordion">
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          <span class="accordion-btn-text">Don Juan Triumphant: Music as Gothic Text</span>
+          <span class="accordion-btn-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <p>
+            In Leroux's novel, the Phantom's opera <em>Don Juan Triumphant</em> is more than a
+            creative work — it is a Gothic artifact. The composition is described as something
+            alien and disturbing, music that bypasses rational faculties and operates directly on
+            emotion and primal fear. It is the musical equivalent of the mirrored torture chamber:
+            architecture built of sound rather than stone.
+          </p>
+          <p>
+            The climactic scene in which the Phantom takes over the performance of the opera —
+            removing the singer and performing himself — is the apotheosis of auditory control.
+            The audience cannot see who is singing. The voice comes from everywhere. The Phantom's
+            genius is that he can make a public performance into his private weapon, controlling
+            thousands of people through sound alone.
+          </p>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          <span class="accordion-btn-text">Silence as Horror: When the Sound Stops</span>
+          <span class="accordion-btn-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <p>
+            Both works understand that silence is its own form of auditory horror. In the Opera
+            House's underground passages, Leroux describes moments of absolute silence that are
+            more terrifying than any sound — because in silence, the imagination fills the void
+            with worse horrors than anything real.
+          </p>
+          <p>
+            <em>Amnesia</em> exploits this masterfully. The game's most frightening moments are
+            often the quiet ones: a room where the ambient groaning has stopped. The silence means
+            something is near enough that it has stopped moving. The absence of sound becomes a
+            signal of immediate danger. Both works use the structure of sound and silence as a
+            rhythmic Gothic device — the alternation between the known and the unknown.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div><!-- end #sound -->
+
+<!-- ═══════════════════════════════════════════ PAGE 4: SANITY ═══ -->
+<div id="sanity">
+  <section>
+    <div class="section-label">Page Four · Psychological Unraveling</div>
+    <h2>The Mind <em>Descending</em></h2>
+
+    <p>
+      The true horror of both works is not the Phantom or the monsters — it is the idea that any
+      human mind, placed in the right conditions of darkness, disorientation, and auditory
+      manipulation, will break. Leroux demonstrates this through Christine, Raoul, and the Persian.
+      Frictional Games builds it directly into their mechanics through the sanity system.
+    </p>
+
+    <!-- INTERACTIVE SANITY METER -->
+    <div class="sanity-demo">
+      <p class="sanity-label">Interactive · Amnesia Sanity System</p>
+      <p style="font-style:italic; font-size:0.9rem; color:rgba(232,223,200,0.6); margin-bottom:24px;">
+        Drag the slider to explore how Daniel's sanity degrades as Gothic horror accumulates.
+        Watch how the description changes — this mirrors what Leroux does to his characters.
+      </p>
+      <div class="sanity-value" id="sanityValue">100</div>
+      <div class="sanity-bar-container">
+        <div class="sanity-bar" id="sanityBar" style="width:100%"></div>
+      </div>
+      <input type="range" class="sanity-slider" id="sanitySlider" min="0" max="100" value="100">
+      <p class="sanity-description" id="sanityDesc">
+        Full sanity. The rational mind perceives the world clearly. The descent has not begun.
+      </p>
+    </div>
+
+    <p>
+      The heroine of Leroux's novel, Christine, isn't afraid in the traditional Gothic sense —
+      she is not afraid because she is locked in a physical prison. Christine is afraid because
+      she does not know if she can trust her own brain. Her voice is being controlled by a voice
+      in the dark. This proves that the darkest prison in the novel is her own trauma. This is
+      the same crisis <em>Amnesia</em>'s Daniel faces: he has erased his own memory. He cannot
+      trust what he perceives or what he remembers.
+    </p>
+
+    <!-- CHARACTER BREAKDOWNS -->
+    <h3>Three Descents: Character Studies</h3>
+    <div class="accordion">
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          <span class="accordion-btn-text">Christine Daaé — Psychological Imprisonment</span>
+          <span class="accordion-btn-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <p>
+            Christine is completely locked in a mental prison long before she ever finds herself
+            in a physical one. Leroux takes care to illustrate just how vulnerable Christine's
+            character is after the death of her father. Due to how desperate she is for a source
+            of comfort, Erik is able to manipulate her grief to his advantage.
+          </p>
+          <p>
+            Her breakdown is not dramatic — it is quiet and total. She stops questioning the
+            voice. She stops testing reality. She simply accepts. This is Leroux's most disturbing
+            portrait: not the mad scream of someone who knows they are losing their mind, but the
+            peaceful acceptance of someone who has already lost it without realizing it.
+          </p>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          <span class="accordion-btn-text">Raoul & The Persian — Rational Men Made Mad</span>
+          <span class="accordion-btn-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <p>
+            The character of Vicomte de Chagny is a representation of the normal logical world.
+            He is an educated man who is financially secure and believes in the rational world.
+            But the moment he ventures into the underground to save the girl he loves, he loses
+            all logic. The instant he is placed in the dark chamber of torture, he is driven mad
+            by bewilderment and "unendurable" heat.
+          </p>
+          <p>
+            The Persian is even more telling. He knows more about Erik's traps than anyone — he
+            has seen them before, understands how they work, can explain them rationally. Yet he
+            too succumbs. His knowledge does not protect his mind. This is Leroux's most
+            sophisticated point: intelligence and knowledge are not defenses against the darkness.
+            The space destroys rational thought regardless of who the character is.
+          </p>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-btn" onclick="toggleAccordion(this)">
+          <span class="accordion-btn-text">Daniel — The Player Who Must Experience the Descent</span>
+          <span class="accordion-btn-icon">+</span>
+        </button>
+        <div class="accordion-body">
+          <p>
+            Daniel's situation in <em>Amnesia</em> is structurally identical to Christine's but
+            experienced interactively. He has erased his own memory — a voluntary psychological
+            self-destruction — to escape the knowledge of what he has done. This means the player
+            experiences the castle without context, without memory, and without the tools to
+            understand what is happening. The castle destroys Daniel's sanity not because he is
+            weak, but because it is designed to destroy anyone.
+          </p>
+          <p>
+            The sanity mechanic makes the player feel this personally. When Daniel's sanity drops,
+            the player's screen distorts, the controls become erratic, and Daniel begins to
+            hallucinate. This is the interactive equivalent of Leroux describing Raoul as "raving"
+            — the audience does not merely read about the breakdown, they experience it.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ERIK ANALYSIS -->
+    <div class="compare-grid" style="margin-top:60px;">
+      <div class="compare-card phantom">
+        <span class="compare-tag">The Phantom · Erik</span>
+        <h3>The Monster Who Is Just a Man</h3>
+        <p>
+          Erik is described like a walking corpse: "He is extraordinarily thin and his dress-coat
+          hangs on a skeleton frame. His eyes are so deep that you can hardly see the fixed pupils.
+          You just see two big black holes, as in a dead man's skull" (Leroux, ch. 1).
+        </p>
+        <p>
+          But the scariest moment in the novel is when he shouts at Christine: "I am neither an
+          angel nor a genius nor a ghost... I am Erik!" (Leroux, ch. 12). This crazy, deadly man
+          is just a normal man. That makes him more terrifying. He is a physical representation of
+          what isolation and pain can do to a human being. He has learned to create hostile traps
+          because society has always been hostile to him.
+        </p>
+      </div>
+      <div class="compare-card amnesia">
+        <span class="compare-tag">Amnesia · Alexander of Brennenburg</span>
+        <h3>The Monster Behind the Architecture</h3>
+        <p>
+          Alexander is the architect of Daniel's suffering, just as Erik is the architect of the
+          underground. But like Erik, Alexander is revealed to be a man driven to monstrous acts
+          by circumstance — in his case, the desperate need to return to his home dimension and
+          escape the Shadow that hunts him.
+        </p>
+        <p>
+          Both antagonists are masters of their environments. Both have created spaces that serve
+          their pathological needs. And both are revealed, at their core, to be beings of profound
+          loneliness — monsters made by isolation, not born into it.
+        </p>
+      </div>
+    </div>
+
+    <!-- RESOLUTION VIDEO -->
+    <div class="media-container" style="margin-top:60px;">
+      <div class="media-label">Amnesia: The Dark Descent — All Three Endings</div>
+      <div class="embed-wrapper">
+        <iframe
+          src="https://www.youtube.com/embed/_niCjMgz-Sw"
+          title="Amnesia endings"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <p class="media-caption">
+        <em>Amnesia</em>'s three endings mirror the Gothic tension between damnation, survival, and
+        redemption that Leroux resolves through Christine's act of compassion. In Leroux's novel,
+        the descent into madness is reversed not through cleverness but through human connection —
+        Christine's compassion breaks Erik and ends the horror. Does <em>Amnesia</em> offer the
+        same escape?
+      </p>
+    </div>
+
+    <h3>The Resolution: Compassion Against the Dark</h3>
+    <p>
+      The most remarkable thing about Leroux's novel is its ending. The characters never overcome
+      their descent into madness through a clever trick or a fight with Erik. They overcome their
+      psychological nightmare through a simple act of human understanding. When Christine stops
+      running and shows Erik true compassion, the monster breaks down.
+    </p>
+
+    <blockquote>
+      "I tore off my mask so as not to lose one of her tears... and she did not run away!
+      ... She stayed, she let me kiss her!"
+      <cite>— Erik to The Persian, Leroux, ch. 26</cite>
+    </blockquote>
+
+    <p>
+      Erik then cries like a child, Christine calling him "poor unhappy Erik" (Leroux, ch. 26).
+      The monster who was so masterful in his dark labyrinth is now a broken outsider who simply
+      wanted human interaction — which he was denied his entire life. This ending demonstrates
+      that the only way to survive in the madness of the dark is through emotional interaction.
+      Gothic horror, in Leroux's vision, is cured not by heroism but by empathy.
+    </p>
+
+  </section>
+</div><!-- end #sanity -->
+
+<!-- ═══════════════════════════════════════════ CREATOR'S NOTE ═══ -->
+<div id="creators-note">
+  <div class="dark-band">
+    <div class="dark-band-inner">
+      <div class="section-label">Creator's Note</div>
+      <h2>On Making This <em>Project</em></h2>
+
+      <div class="creators-note">
+        <p>
+          This website is the final project for ENG 318: Gothic Literature and Games, Spring 2026.
+          My original proposal was for a video presentation, but I switched to a website format
+          to better realize the central themes of the project. The irony of studying auditory
+          manipulation and Gothic space is that a website can demonstrate these things rather than
+          merely describe them — you can hear the Phantom's voice, experience the distorted visuals
+          of Amnesia's sanity system, and navigate the site's own labyrinthine structure.
+        </p>
+        <p>
+          My two primary texts are Gaston Leroux's <em>The Phantom of the Opera</em> (1910) and
+          Frictional Games's <em>Amnesia: The Dark Descent</em> (2010). The comparison emerged
+          from a simple observation: both works are obsessed with what happens to the human mind
+          when it is placed in a Gothic space — underground, labyrinthine, dark, and filled with
+          sound that cannot be trusted. The century between these two texts did not diminish the
+          power of these Gothic strategies; it evolved them. Leroux describes the effect of the
+          underground on the mind. Frictional Games makes you feel it.
+        </p>
+        <p>
+          The analytical work in this project draws primarily on three Gothic strategies: the use
+          of architecture as an active villain rather than passive setting, the deployment of sound
+          and silence as instruments of psychological control, and the inevitable mental collapse
+          of any character placed in these conditions long enough. I have tried to demonstrate
+          that these strategies operate identically across both texts despite the century and the
+          medium that separates them, which suggests that Leroux identified something fundamental
+          about how Gothic horror works — something that game designers rediscovered independently
+          a hundred years later.
+        </p>
+        <p>
+          The most surprising thing I found in this analysis is the resolution. Both works suggest
+          that the only escape from Gothic psychological horror is not intelligence, not bravery,
+          but empathy. Christine's compassion for Erik dissolves the Gothic trap. In <em>Amnesia</em>,
+          the "good" ending requires Daniel to choose mercy over self-preservation. Gothic horror,
+          in both of these works, is ultimately a story about what happens to human beings when
+          they are denied human connection — and what restores them when that connection is finally offered.
+        </p>
+        <p>
+          All media embedded in this site is used for educational purposes under fair use, cited
+          below. All analysis is my own. Academic sources consulted include scholarship on the
+          psychology of Gothic horror and game sound design.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ WORKS CITED ═══ -->
+<div id="works-cited">
+  <div class="works-cited">
+    <div class="works-cited-inner">
+      <div class="section-label">Works Cited</div>
+      <h2>Sources</h2>
+
+      <h3 style="margin-top:40px; font-size:1.1rem; letter-spacing:0.2em; font-family:'Josefin Sans',sans-serif; color:var(--gold-dim); font-style:normal; text-transform:uppercase; font-weight:300;">Primary Sources</h3>
+
+      <div class="cite-entry">
+        Leroux, Gaston. <em>The Phantom of the Opera</em>. Translated by Alexander Teixeira de
+        Mattos, Project Gutenberg, 1994, www.gutenberg.org/ebooks/175.
+      </div>
+      <div class="cite-entry">
+        Frictional Games. <em>Amnesia: The Dark Descent</em>. Frictional Games, 2010. PC game.
+      </div>
+
+      <h3 style="margin-top:40px; font-size:1.1rem; letter-spacing:0.2em; font-family:'Josefin Sans',sans-serif; color:var(--gold-dim); font-style:normal; text-transform:uppercase; font-weight:300;">Secondary Sources</h3>
+
+      <div class="cite-entry">
+        Botting, Fred. <em>Gothic</em>. Routledge, 1996.
+      </div>
+      <div class="cite-entry">
+        Collins, Karen. <em>Game Sound: An Introduction to the History, Theory, and Practice of Video Game Music and Sound Design</em>. MIT Press, 2008.
+      </div>
+
+      <h3 style="margin-top:40px; font-size:1.1rem; letter-spacing:0.2em; font-family:'Josefin Sans',sans-serif; color:var(--gold-dim); font-style:normal; text-transform:uppercase; font-weight:300;">Media Sources</h3>
+
+      <div class="cite-entry">
+        <em>The Phantom of the Opera</em>. Directed by Joel Schumacher, Warner Bros., 2004.
+        [Film trailer — embedded via YouTube for educational purposes.]
+      </div>
+      <div class="cite-entry">
+        "Music of the Night." <em>The Phantom of the Opera</em>, music and lyrics by Andrew
+        Lloyd Webber, Really Useful Films, 2004. [Embedded via YouTube for educational purposes.]
+      </div>
+      <div class="cite-entry">
+        Frictional Games. <em>Amnesia: The Dark Descent</em> — Official Trailer and gameplay footage.
+        Frictional Games, 2010. [Embedded via YouTube for educational purposes.]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-title">Descending Into Dark</span>
+  <span class="footer-meta">ENG 318 · Gothic Literature & Games · Spring 2026</span>
+</footer>
+
+<!-- ═══════════════════════════════════════════ SCRIPTS ═══ -->
+<script>
+  // Accordion
+  function toggleAccordion(btn) {
+    const body = btn.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+
+    // Close all
+    document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.accordion-btn').forEach(b => b.classList.remove('open'));
+
+    if (!isOpen) {
+      body.classList.add('open');
+      btn.classList.add('open');
+    }
+  }
+
+  // Sanity meter
+  const slider = document.getElementById('sanitySlider');
+  const bar = document.getElementById('sanityBar');
+  const val = document.getElementById('sanityValue');
+  const desc = document.getElementById('sanityDesc');
+
+  const sanityStates = [
+    { min: 0, max: 10, text: "Complete breakdown. The architecture of the dark has won. Daniel hallucinates constantly — the walls breathe, figures that aren't there reach for him, reality has dissolved entirely. This is what happens in Erik's mirrored torture chamber at the end." },
+    { min: 11, max: 25, text: "Severe deterioration. Like Raoul in the underground, madness has set in fully. The rational mind is gone. What remains is pure animal fear, unable to reason or plan. The darkness has succeeded." },
+    { min: 26, max: 40, text: "Significant impairment. Christine at her most lost — hearing Erik's voice as the Angel of Music, unable to distinguish manipulation from truth. The mind has been colonized by the darkness." },
+    { min: 41, max: 60, text: "Moderate fear. The descent is underway. Like Raoul when he first enters the cellars — still rational, but the logic begins to slip. The architecture is doing its work." },
+    { min: 61, max: 80, text: "Mild unease. The Gothic setting has registered. The hairs rise; something feels wrong. This is the threshold Leroux describes when his characters cross the underground lake — the world above has been left behind." },
+    { min: 81, max: 100, text: "Full sanity. The rational mind perceives the world clearly. The descent has not begun. The Opera House glitters above; the game is not yet launched. All is well — for now." }
+  ];
+
+  slider.addEventListener('input', function() {
+    const v = parseInt(this.value);
+    bar.style.width = v + '%';
+    val.textContent = v;
+
+    // Color shift
+    const r = Math.round(139 + (201-139) * v/100);
+    const g = Math.round(26 + (168-26) * v/100);
+    const b2 = Math.round(26 + (76-26) * v/100);
+    bar.style.background = `linear-gradient(to right, rgb(139,26,26), rgb(${r},${g},${b2}))`;
+
+    const state = sanityStates.find(s => v >= s.min && v <= s.max);
+    if (state) desc.textContent = state.text;
+  });
+
+  // Smooth scroll for nav
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Intersection observer for fade-in elements
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.compare-card, .quote-side, .media-container, .accordion').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
